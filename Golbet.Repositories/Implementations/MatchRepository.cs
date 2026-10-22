@@ -24,7 +24,7 @@ public class MatchRepository : GenericRepository<Match>, IMatchRepository
 
 
 
-    public async Task<IEnumerable<Match>> GetAllWithTeamsAsync(MatchStatus? status = null)
+    public async Task<IEnumerable<Match>> GetAllWithTeamsAsync(MatchStatus? status = null, string? search = null) // ampliamos el Iquerable
 
     {
 
@@ -47,12 +47,25 @@ public class MatchRepository : GenericRepository<Match>, IMatchRepository
             query = query.Where(m => m.Status == status.Value);
 
 
+        // 
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            string searchLower = search.Trim().ToLower();
+            query = query.Where(m => m.HomeTeam.Name.ToLower().Contains(searchLower)
+                                  || m.AwayTeam.Name.ToLower().Contains(searchLower));
+        }
+
+        //
 
         return await query.OrderBy(m => m.Date).ToListAsync();
 
     }
 
-
+    public Task<IEnumerable<Match>> GetAllWithTeamsAsync(MatchStatus? status = null)
+    {
+        throw new NotImplementedException();
+    }
 
     public async Task<Match?> GetByIdWithDetailsAsync(int id)
 

@@ -38,15 +38,13 @@ public class MatchService : IMatchService
 
 
 
-    public async Task<IEnumerable<MatchDto>> GetBoardAsync(MatchStatus? status = null)
+  
 
+    public async Task<IEnumerable<MatchDto>> GetBoardAsync(MatchStatus? status = null, string? search = null)
     {
-
-        var matches = await _matchRepository.GetAllWithTeamsAsync(status);
-
+        var matches = await _matchRepository.GetAllWithTeamsAsync(status, search);
         return _mapper.Map<IEnumerable<MatchDto>>(matches);
-
-    }
+    }  // 
 
     public async Task<MatchDetailDto?> GetDetailAsync(int id)
 
@@ -150,4 +148,5 @@ public class MatchService : IMatchService
 
     }
 
+   
 }
